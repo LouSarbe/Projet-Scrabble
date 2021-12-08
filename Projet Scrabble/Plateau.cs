@@ -58,7 +58,7 @@ namespace Projet_Scrabble
                 {
                     for(int i = 0; i < mot.Length; i++) //Vérification que les cases sont vides, ou que les croisements ont les mêmes lettres
                     {
-                        if (plateau[ligne, colonne - i] != mot[i] && plateau[ligne, colonne - i] != '_') 
+                        if (plateau[ligne, colonne - i] != mot[i] && plateau[ligne, colonne - i] != '_')
                         {
                             ret = false;
                         }
@@ -72,8 +72,8 @@ namespace Projet_Scrabble
                 if (mot.Length >= 15 - ligne)//Vérification espace nécessaire
                 {
                     Console.WriteLine("Erreur, il n'y a pas assez d'espace pour placer ce mot ici");
-                    return false;
-                }
+                            return false;
+                        }
                 else
                 {
                     for (int i = 0; i < mot.Length; i++)//Vérification que les cases sont vides, ou que les croisements ont les mêmes lettres
@@ -85,24 +85,24 @@ namespace Projet_Scrabble
                     }
                     if (ret == false) Console.WriteLine("Il n'est pas possible de placer ce mot ici");
                     return ret;
+                    }
                 }
-            }
             else if (direction == 'g')//Si mot va vers la gauche
             {
                 if (mot.Length > colonne + 1)//Vérification espace nécessaire
                 {
                     Console.WriteLine("Erreur, il n'y a pas assez d'espace pour placer ce mot ici");
                     return false;
-                }
+            }
                 else
-                {
+            {
                     for (int i = 0; i < mot.Length; i++)//Vérification que les cases sont vides, ou que les croisements ont les mêmes lettres
                     {
                         if (plateau[ligne - i, colonne] != mot[i] && plateau[ligne - i, colonne] != '_')
                         {
                             Console.WriteLine("Erreur, il n'est pas possible de placer ce mot ici.");
                             ret = false;
-                        }
+            }
                     }
                     if (ret == false) Console.WriteLine("Il n'est pas possible de placer ce mot ici");
                     return ret;
@@ -111,16 +111,16 @@ namespace Projet_Scrabble
             else if (direction == 'd')//Si mot va vers la droite
             {
                 if (mot.Length >= 15 - colonne)//Vérification espace nécessaire
-                {
+            {
                     Console.WriteLine("Erreur, il n'y a pas assez d'espace pour placer ce mot ici");
                     return false;
-                }
+            }
                 else
                 {
                     for (int i = 0; i < mot.Length; i++)//Vérification que les cases sont vides, ou que les croisements ont les mêmes lettres
                     {
                         if (plateau[ligne + i, colonne] != mot[i] && plateau[ligne + i, colonne] != '_')
-                        {
+            {
                             ret = false;
                         }
                     }
