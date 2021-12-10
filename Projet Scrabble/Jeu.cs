@@ -67,7 +67,7 @@ namespace Projet_Scrabble
             if (answer == "1") monplateau = new Plateau();
             else monplateau = new Plateau(fichier);
 
-            //Création des timer
+            //Création des timers
             DateTime GameStart = DateTime.Now; //Heure du début du jeu
             TimeSpan TimerTotal = DateTime.Now - GameStart; //Timer total de la session de jeu
             Console.WriteLine("Combien de secondes voulez vous avoir à chaque tour de jeu ?");
