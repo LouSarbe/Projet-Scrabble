@@ -11,6 +11,21 @@ namespace Projet_Scrabble
         //Déclaration
         char[,] plateau;
 
+
+        List<Jeton> jetons; //Initie une liste qui nous donnera les jetons utilisés pendant le placement d'un nouveau mot
+
+        //Propriétés
+        public char[,] Board
+        {
+            get { return plateau; }
+            set { plateau = value; }
+        }
+        public List<Jeton> Jetons
+        {
+            get { return jetons; }
+            set { jetons = value; }
+        }
+
         //Constructeurs
         public Plateau() //Constructeur de base
         {
@@ -62,6 +77,10 @@ namespace Projet_Scrabble
                         {
                             ret = false;
                         }
+                        else //Tout est bon, on maintenant regarder les jetons utilisés et les cases spéciales (mot double, lettre triple, ...)
+                        {
+                            if (plateau[ligne, colonne - i] != mot[i]) jetons.Add(Jeton[mot[i]]);
+                        }
                     }
                     if (ret == false) Console.WriteLine("Il n'est pas possible de placer ce mot ici");
                     return ret;
@@ -81,6 +100,10 @@ namespace Projet_Scrabble
                         if (plateau[ligne, colonne + i] != mot[i] && plateau[ligne, colonne  + i] != '_')
                         {
                             ret = false;
+                        }
+                        else //Tout est bon, on maintenant regarder les jetons utilisés et les cases spéciales (mot double, lettre triple, ...)
+                        {
+                            if (plateau[ligne, colonne + i] != mot[i]) jetons.Add(mot[i]);
                         }
                     }
                     if (ret == false) Console.WriteLine("Il n'est pas possible de placer ce mot ici");
@@ -102,7 +125,11 @@ namespace Projet_Scrabble
                         {
                             Console.WriteLine("Erreur, il n'est pas possible de placer ce mot ici.");
                             ret = false;
-            }
+                        }
+                        else //Tout est bon, on maintenant regarder les jetons utilisés et les cases spéciales (mot double, lettre triple, ...)
+                        {
+                            if (plateau[ligne - i, colonne] != mot[i]) jetons.Add(mot[i]);
+                        }
                     }
                     if (ret == false) Console.WriteLine("Il n'est pas possible de placer ce mot ici");
                     return ret;
@@ -122,6 +149,10 @@ namespace Projet_Scrabble
                         if (plateau[ligne + i, colonne] != mot[i] && plateau[ligne + i, colonne] != '_')
             {
                             ret = false;
+                        }
+                        else //Tout est bon, on maintenant regarder les jetons utilisés et les cases spéciales (mot double, lettre triple, ...)
+                        {
+                            if (plateau[ligne + i, colonne] != mot[i]) jetons.Add(mot[i]);
                         }
                     }
                     if (ret == false) Console.WriteLine("Il n'est pas possible de placer ce mot ici");

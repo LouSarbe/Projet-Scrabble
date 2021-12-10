@@ -8,12 +8,34 @@ namespace Projet_Scrabble
 {
     class Joueur
     {
+
         //Déclaration des attributs
         string nom;
         int score = 0;
         List<string> mots = null;
-        List<char> jetons = new List<char>();
+        List<Jeton> jetons = new List<Jeton>();
 
+
+        //Propriétés
+        public int Score
+        {
+            get { return score; }
+            set { score = value; }
+        }
+        public List<string> Mots
+        {
+            get { return mots; }
+            set { mots = value; }
+        }
+        public List<Jeton> Jetons
+        {
+            get { return jetons; }
+            set { jetons = value; }
+        }
+        public string Nom
+        {
+            get { return nom; }
+        }
 
         //Constructeur
         public Joueur(string nom) //Constructeur de base
@@ -34,9 +56,15 @@ namespace Projet_Scrabble
             mots.Add(mot);
         }
 
-        public string toString()
+        public string toString() //Affiche le nom du joueur, son score, son nombre de mots trouvés et sa main
         {
-            return "Le joueur " + nom + " a actuellement " + score + " point(s) et a trouvé " + mots.Count + " mot(s).";
+            string ret = "\n\nLe joueur " + nom + " a actuellement " + score + " point(s) et a trouvé " + mots.Count + " mot(s).\nIl a dans sa main : ";
+            for (int i = 0; i < jetons.Count - 1; i++)
+            {
+                ret += jetons[i] + ", ";
+            }
+            ret += " et " + jetons[jetons.Count - 1];
+            return ret;
         }
 
         public void Add_Score(int val)
@@ -51,80 +79,5 @@ namespace Projet_Scrabble
         {
             jetons.Remove(monjeton);
         }
-
-        /*string nom;
-int score;
-string[] mottrouves;
-
-public string nom
-    {
-        get
-        {
-            return _nom;
-        }
-        set
-        {
-            _nom = value;
-        }
-    }
-    public int score
-    {
-        get
-        {
-            return _score;
-        }
-        set
-        {
-            _score = value;
-        }
-    }
-    public string [] mottrouves
-    {
-        get
-        {
-            return _mottrouves
-        }
-        set
-        {
-            _mottrouves = value;
-        }
-    }
-
-    public Joueur (string nom, int score, string [] mottrouves)
-{
-if(nom=!null)
-        {
-_nom = nom;
-        }
-if(score==0)
-        {
-_score = score;
-        }
-if(mottrouves=null)
-        {
-_mottrouves = mottrouves;
-        }
-
-}
-public Joueur(string nom)
-    {
-        if (nom = !null)
-        {
-            _nom = nom;
-        }
-_score = null;
-_mottrouves = null;
-    }
-    public void Add_Mot(string mot)
-    {
-        mottrouves.Length = mottrouves.Length++;
-        int a = mottrouves.Length;
-        mottrouves[a] = mot;
-    }
-    public override string ToString()
-    {
-        return nom + " a trouve la liste de mots suivants et a donc un score de " + score + " points";
-    }
-*/
     }
 }

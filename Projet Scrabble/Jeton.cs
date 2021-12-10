@@ -11,6 +11,16 @@ namespace Projet_Scrabble
         char jeton;
         int points;
 
+        //Propriété
+        public char Char
+        {
+            get { return jeton; }
+        }
+        public int Points
+        {
+            get { return points; }
+            set { points = value; }
+        }
 
         //Constructeur
         public Jeton(char lettre, int points)
@@ -22,7 +32,7 @@ namespace Projet_Scrabble
         //Opérations
         public string toString()
         {
-            return "Ce jeton est un " + jeton + " et il vaut " + points + " point(s)";
+            return "Jeton : " + jeton + " \t Valeur : " + points + " point(s)";
         }
     }
 }

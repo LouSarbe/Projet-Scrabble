@@ -38,8 +38,14 @@ namespace Projet_Scrabble
         *;0;2
         */
         //Déclaration
-        List<char> sac;
+        List<Jeton> sac;
         int nombre;
+
+        //Propriétés
+        public List<char> Sac
+        {
+            get { return sac; }
+        }
 
         //Constructeur
         public Sac_Jetons()
@@ -50,14 +56,18 @@ namespace Projet_Scrabble
         //Opérations
         public Jeton Retire_Jeton(Random r)
         {
-
+            Jeton ret;
+            int n = r.Next(sac.Count);
+            ret = sac[n];
+            sac.RemoveAt(n);
+            return ret;
         }
         public string toString()
         {
-            string ret;
+            string ret = "";
             for(int i = 0; i < nombre; i++)
             {
-
+                
             }
             return ret;
         }
