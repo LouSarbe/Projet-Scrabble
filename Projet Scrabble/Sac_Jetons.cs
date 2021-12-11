@@ -46,6 +46,10 @@ namespace Projet_Scrabble
         {
             get { return sac; }
         }
+        public int Nombre
+        {
+            get { return nombre; }
+        }
 
         //Constructeur
         public Sac_Jetons()
@@ -60,6 +64,7 @@ namespace Projet_Scrabble
             int n = r.Next(sac.Count);
             ret = sac[n];
             sac.RemoveAt(n);
+            nombre--;
             return ret;
         }
         public string toString()

@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31729.503
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Projet Scrabble", "Projet Scrabble\Projet Scrabble.csproj", "{093F6F51-533F-4CB3-B892-08239F539C31}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Projet Scrabble", "Projet Scrabble\Projet Scrabble.csproj", "{093F6F51-533F-4CB3-B892-08239F539C31}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestProjetScrabble", "TestProjetScrabble\TestProjetScrabble.csproj", "{BE5662F0-6FD1-47AC-AFC9-D52E8D24662D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{093F6F51-533F-4CB3-B892-08239F539C31}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{093F6F51-533F-4CB3-B892-08239F539C31}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{093F6F51-533F-4CB3-B892-08239F539C31}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BE5662F0-6FD1-47AC-AFC9-D52E8D24662D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BE5662F0-6FD1-47AC-AFC9-D52E8D24662D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BE5662F0-6FD1-47AC-AFC9-D52E8D24662D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BE5662F0-6FD1-47AC-AFC9-D52E8D24662D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -12,7 +12,7 @@ namespace Projet_Scrabble
         char[,] plateau;
 
 
-        List<Jeton> jetons; //Initie une liste qui nous donnera les jetons utilisés pendant le placement d'un nouveau mot
+        List<char> jetons; //Initie une liste qui nous donnera les jetons utilisés pendant le placement d'un nouveau mot
 
         //Propriétés
         public char[,] Board
@@ -20,7 +20,7 @@ namespace Projet_Scrabble
             get { return plateau; }
             set { plateau = value; }
         }
-        public List<Jeton> Jetons
+        public List<char> Jetons
         {
             get { return jetons; }
             set { jetons = value; }
@@ -46,8 +46,8 @@ namespace Projet_Scrabble
         //Opérations
         public string toString()
         {
-            string ret = "\n\n\n";
-            for (int i = 0; i < plateau.GetLength(0) - 1; i++)
+            string ret = "\n\n";
+            for (int i = 0; i < plateau.GetLength(0); i++)
             {
                 for (int j = 0; j < plateau.GetLength(1) - 1; j++)
                 {
@@ -79,7 +79,7 @@ namespace Projet_Scrabble
                         }
                         else //Tout est bon, on maintenant regarder les jetons utilisés et les cases spéciales (mot double, lettre triple, ...)
                         {
-                            if (plateau[ligne, colonne - i] != mot[i]) jetons.Add(Jeton[mot[i]]);
+                            if (plateau[ligne, colonne - i] != mot[i]) jetons.Add(mot[i]);
                         }
                     }
                     if (ret == false) Console.WriteLine("Il n'est pas possible de placer ce mot ici");

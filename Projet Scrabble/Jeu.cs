@@ -8,6 +8,7 @@ namespace Projet_Scrabble
         {
             ConsoleKeyInfo cki; //Initialise la touche pressée
             Random r = new Random(); //Initialise l'aléatoire
+
             //Initialisation temporaire du plateau
             string fichier = "V;A;S;_;L;O;B;_;_;W;O;W;_;_;_;_;V;E;_;_;_;A;D;J;U;R;E;R;_;_;L; E;X;E;M;E;S;_;E;_;E;M;A;I;L;_; _;T;_;_;U;_;_;_;P;_;_;G;_;_;_; L;A;_;_;_;_;_;F;I;G;E;E;_;T;_; A;N;_;_;_;_;U;R;E;_;_;A;V;E;_; _;T;E;K;_;_;_;U;_;_;_;T;O;C;_; F;_;P;_;_;_;E;S;_;_;_;_;E;_;L; A;P;I;N;A;_;_;T;_;_;_;H;U;N;I; R;A;_;_;_;O;_;R;A;_;_;U;_;_;_; _;R;U;_;_;N;U;A;I;_;_;E;_;C;_; B;A;T;_;D;_;_;S;_;_;_;R;O;I;R; _;S;E;B;U;M;_;S;_;Q;_;A;_;_;A; D;O;_;A;_;I;R;R;_;U;N;I;O;N;_; _;L;_;T;_;_;_;_;M;E;_;T;U;_";
 
@@ -95,8 +96,11 @@ namespace Projet_Scrabble
             //Déclaration du score à ajouter au joueur en fin de tour
             int score;
 
+            //Déclaration d'une variable qui regarde si le joueur a le jeton qu'il veut jouer dans sa main
+            bool possedejeton;
 
-            while (TimerTotal.TotalMinutes <= 6 && sac.Sac.Count > 0) //Début du jeu : le jeu s'arrête si on atteint 6 minutes
+
+            while (TimerTotal.TotalMinutes <= 6 && sac.Nombre > 0) //Début du jeu : le jeu s'arrête si on atteint 6 minutes
             {
                 //Initialisation des paramètres
                 answer = null;
@@ -106,170 +110,201 @@ namespace Projet_Scrabble
                 int colonne = 0;
                 char direction = 'd';
                 score = 0;
+                possedejeton = true;
 
                 P[PlayerTurn].Add_Main_Courante(sac.Retire_Jeton(r));
 
                 DebutTour = DateTime.Now;
 
-                while(!mondico.RechDichoRecursif(answer) || !monplateau.Test_Plateau(answer, ligne, colonne, direction)) //Tour du joueur
-                {
-                    Console.WriteLine("\n\nC'est au tour de " + P[PlayerTurn].Nom + " de jouer !\n" + P[PlayerTurn].toString()); //Affiche le joueur qui doit jouer et ses attributs
-                    Console.WriteLine("\n\n" + monplateau.toString());
-                    
-                    cki = Console.ReadKey();
-                    //Vérification du temps de tour
-                    TimerTour = DateTime.Now - DebutTour;
-                    if (cki.Key == ConsoleKey.Spacebar || TimerTour >= TimeAllowed) goto PasserLeTour; //Si le joueur appuie sur espace, il passe le tour sans poser de mot
+                //Tour du joueur
+                DEBUTDETOUR:
+                Console.WriteLine("\n\nC'est au tour de " + P[PlayerTurn].Nom + " de jouer !\n" + P[PlayerTurn].toString()); //Affiche le joueur qui doit jouer et ses attributs
+                Console.WriteLine("\n\n" + monplateau.toString());
 
+                //Vérification du temps de tour
+                Console.WriteLine("Si vous voulez passer votre tour, appuyez sur espace. Sinon appuyez sur une autre touche");
+                cki = Console.ReadKey();
+                TimerTour = DateTime.Now - DebutTour;
+                if (cki.Key == ConsoleKey.Spacebar || TimerTour >= TimeAllowed) goto PasserLeTour; //Si le joueur appuie sur espace, il passe le tour sans poser de mot
+                else
+                {
+                    //Le joueur choisit un mot à  jouer
                     Console.WriteLine("\nQuel mot voulez vous placer ? ");
-                    answer = Convert.ToString(Console.ReadLine()); //Le joueur donne un mot à jouer
+                    while (!mondico.RechDichoRecursif(answer))
+                    {
+                        answer = Convert.ToString(Console.ReadLine()).ToUpper(); //Enregistre la réponse de l'utilisateur, en lettres majuscules
+                        if (!mondico.RechDichoRecursif(answer)) Console.WriteLine("Le mot " + answer + " n'appartient pas au dictionnaire");
+                    }
 
                     //Vérification du temps de tour
                     TimerTour = DateTime.Now - DebutTour;
                     if (TimerTour >= TimeAllowed) goto PasserLeTour;
 
-                    //Le joueur place la première lettre dans une case et donne une direction pour jouer le mot
-                    Console.WriteLine("Dans quelle ligne voulez vous mettre la première lettre ?");
-                    ligne = Convert.ToInt32(Console.ReadLine());
+                    while (!monplateau.Test_Plateau(answer, ligne, colonne, direction))
+                    {
+                        //Ligne de la première lettre
+                        Console.WriteLine("Dans quelle ligne voulez vous mettre la première lettre ?");
+                        ligne = Convert.ToInt32(Console.ReadLine());
 
-                    //Vérification du temps de tour
-                    TimerTour = DateTime.Now - DebutTour;
-                    if (TimerTour >= TimeAllowed) goto PasserLeTour;
+                        //Vérification du temps de tour
+                        TimerTour = DateTime.Now - DebutTour;
+                        if (TimerTour >= TimeAllowed) goto PasserLeTour;
 
-                    Console.WriteLine("Dans quelle colonne voulez vous mettre la première lettre ?");
-                    colonne = Convert.ToInt32(Console.ReadLine());
+                        //Colonne de la première lettre
+                        Console.WriteLine("Dans quelle colonne voulez vous mettre la première lettre ?");
+                        colonne = Convert.ToInt32(Console.ReadLine());
 
-                    //Vérification du temps de tour
-                    TimerTour = DateTime.Now - DebutTour;
-                    if (TimerTour >= TimeAllowed) goto PasserLeTour;
+                        //Vérification du temps de tour
+                        TimerTour = DateTime.Now - DebutTour;
+                        if (TimerTour >= TimeAllowed) goto PasserLeTour;
 
-                    Console.WriteLine("Dans quelle direction voulez vous jouer la lettre ? Merci de mettre d pour droite, g pour gauche, h pour haut et b pour bas");
-                    direction = Convert.ToChar(Console.ReadLine());
+                        //Choix de la direction
+                        Console.WriteLine("Dans quelle direction voulez vous jouer la lettre ? Merci de mettre d pour droite, g pour gauche, h pour haut et b pour bas");
+                        direction = Convert.ToChar(Console.ReadLine());
 
-                    //Vérification du temps de tour
-                    TimerTour = DateTime.Now - DebutTour;
-                    if (TimerTour >= TimeAllowed) goto PasserLeTour;
+                        //Vérification du temps de tour
+                        TimerTour = DateTime.Now - DebutTour;
+                        if (TimerTour >= TimeAllowed) goto PasserLeTour;
+                    }
+
+                    //Boucle qui vérifie que le joueur a les bons jetons pour faire ce qu'il demande
+                    for(int i = 0; i < monplateau.Jetons.Count; i++)
+                    {
+                        while (possedejeton)
+                        {
+                            //Vérifie que le joueur a le jeton correspondant ou un jeton joker
+                            if (!P[PlayerTurn].Jetons.Contains(Jeton[monplateau.Jetons[i]]) && !P[PlayerTurn].Jetons.Contains(Jeton['*'])) possedejeton = false; 
+                            else if (P[PlayerTurn].Jetons.Contains(Jeton['*'])) //Si le joueur utilise un joker, il est retiré instantanément
+                            {
+                                monplateau.Jetons.RemoveAt(i);
+                                P[PlayerTurn].Jetons.Remove(Jeton['*']);
+                            }
+
+                        }
+                    }
+
+                    if (!possedejeton) goto DEBUTDETOUR; //Si le joueur n'a pas les bons jetons, alors il est renvoyé au début de son tour
+
+                    //On place le mot dans le plateau
+                    for (int i = 0; i < answer.Length; i++)
+                    {
+
+                        if (direction == 'd') //Si la direction choisie est la droite
+                        {
+                            //On vérifie ce qu'il y a dans la case (case vide, spéciale ou occuppée par la même lettre) et on agit en fontion de la situation
+                            if (monplateau.Board[ligne, colonne + i] == '1') //Lettre double
+                            {
+                                score += Jeton[answer[i]].Points * 2;
+                            }
+                            else if (monplateau.Board[ligne, colonne + i] == '2') //Lettre triple
+                            {
+                                score += Jeton[answer[i]].Points * 3;
+                            }
+                            else if (monplateau.Board[ligne, colonne + i] == '3') //Mot double
+                            {
+                                MotDouble = true;
+                                score += Jeton[answer[i]].Points;
+                            }
+                            else if (monplateau.Board[ligne, colonne + i] == '4') //Mot triple
+                            {
+                                MotTriple = true;
+                                score += Jeton[answer[i]].Points;
+                            }
+                            else if (monplateau.Board[ligne, colonne + i] == '_') score += Jeton[answer[i]].Points; //Case vide
+                            monplateau.Board[ligne, colonne + i] = answer[i];
+                        }
+
+                        else if (direction == 'g') //Si la direction choisie est la gauche
+                        {
+                            //On vérifie ce qu'il y a dans la case (case vide, spéciale ou occuppée par la même lettre) et on agit en fontion de la situation
+                            if (monplateau.Board[ligne, colonne - i] == '1') //Lettre double
+                            {
+                                score += Jeton[answer[i]].Points * 2;
+                            }
+                            else if (monplateau.Board[ligne, colonne - i] == '2') //Lettre triple
+                            {
+                                score += Jeton[answer[i]].Points * 3;
+                            }
+                            else if (monplateau.Board[ligne, colonne - i] == '3') //Mot double
+                            {
+                                MotDouble = true;
+                                score += Jeton[answer[i]].Points;
+                            }
+                            else if (monplateau.Board[ligne, colonne - i] == '4') //Mot triple
+                            {
+                                MotTriple = true;
+                                score += Jeton[answer[i]].Points;
+                            }
+                            else if (monplateau.Board[ligne, colonne - i] == '_') score += Jeton[answer[i]].Points;
+                            monplateau.Board[ligne, colonne - i] = answer[i];
+                        }
+
+                        else if (direction == 'h') //Si la direction choisie est le haut
+                        {
+                            //On vérifie ce qu'il y a dans la case (case vide, spéciale ou occuppée par la même lettre) et on agit en fontion de la situation
+                            if (monplateau.Board[ligne - i, colonne] == '1') //Lettre double
+                            {
+                                score += Jeton[answer[i]].Points * 2;
+                            }
+                            else if (monplateau.Board[ligne - i, colonne] == '2') //Lettre triple
+                            {
+                                score += Jeton[answer[i]].Points * 3;
+                            }
+                            else if (monplateau.Board[ligne - i, colonne] == '3') //Mot double
+                            {
+                                MotDouble = true;
+                                score += Jeton[answer[i]].Points;
+                            }
+                            else if (monplateau.Board[ligne - i, colonne] == '4') //Mot triple
+                            {
+                                MotTriple = true;
+                                score += Jeton[answer[i]].Points;
+                            }
+                            else if (monplateau.Board[ligne - i, colonne] == '_') score += Jeton[answer[i]].Points;
+                            monplateau.Board[ligne - i, colonne] = answer[i];
+                        }
+
+                        else if (direction == 'b') //Si la direction choisie est le bas
+                        {
+                            //On vérifie ce qu'il y a dans la case (case vide, spéciale ou occuppée par la même lettre) et on agit en fontion de la situation
+                            if (monplateau.Board[ligne + i, colonne] == '1') //Lettre double
+                            {
+                                score += Jeton[answer[i]].Points * 2;
+                            }
+                            else if (monplateau.Board[ligne + i, colonne] == '2') //Lettre triple
+                            {
+                                score += Jeton[answer[i]].Points * 3;
+                            }
+                            else if (monplateau.Board[ligne + i, colonne] == '3') //Mot double
+                            {
+                                MotDouble = true;
+                                score += Jeton[answer[i]].Points;
+                            }
+                            else if (monplateau.Board[ligne + i, colonne] == '4') //Mot triple
+                            {
+                                MotTriple = true;
+                                score += Jeton[answer[i]].Points;
+                            }
+                            else if (monplateau.Board[ligne + i, colonne] == '_') score += Jeton[answer[i]].Points;
+                            monplateau.Board[ligne + i, colonne] = answer[i];
+                        }
+                    }
+
+                    P[PlayerTurn].Add_Mot(answer); //On rajoute le mot à la liste de mots trouvés
+
+                    //On rajoute ses points à son score
+                    if (MotDouble) P[PlayerTurn].Score += 2 * score;
+                    if (MotTriple) P[PlayerTurn].Score += 3 * score;
+                    else P[PlayerTurn].Score += score;
+
+                    //On enlève ses jetons utilisés de sa main
+                    for (int i = 0; i < monplateau.Jetons.Count; i++)
+                        P[PlayerTurn].Remove_Main_Courante(monplateau.Jetons[i]);
+
+                    //On affiche ses informations ainsi que le plateau
+                    Console.WriteLine(P[PlayerTurn].toString());
+                    monplateau.toString();
                 }
-                
-                //On place le mot dans le plateau
-                for(int i = 0; i < answer.Length; i++) 
-                {
-
-                    if(direction == 'd') //Si la direction choisie est la droite
-                    {
-                        //On vérifie ce qu'il y a dans la case (case vide, spéciale ou occuppée par la même lettre) et on agit en fontion de la situation
-                        if (monplateau.Board[ligne, colonne + i] == '1') //Lettre double
-                        {
-                            score += Jeton[answer[i]].Points * 2;
-                        }
-                        else if (monplateau.Board[ligne, colonne + i] == '2') //Lettre triple
-                        {
-                            score += Jeton[answer[i]].Points * 3;
-                        }
-                        else if (monplateau.Board[ligne, colonne + i] == '3') //Mot double
-                        {
-                            MotDouble = true;
-                            score += Jeton[answer[i]].Points;
-                        }
-                        else if (monplateau.Board[ligne, colonne + i] == '4') //Mot triple
-                        {
-                            MotTriple = true;
-                            score += Jeton[answer[i]].Points;
-                        }
-                        else if (monplateau.Board[ligne, colonne + i] == '_') score += Jeton[answer[i]].Points; //Case vide
-                        monplateau.Board[ligne, colonne + i] = answer[i];
-                    }
-
-                    else if (direction == 'g') //Si la direction choisie est la gauche
-                    {
-                        //On vérifie ce qu'il y a dans la case (case vide, spéciale ou occuppée par la même lettre) et on agit en fontion de la situation
-                        if (monplateau.Board[ligne, colonne - i] == '1') //Lettre double
-                        {
-                            score += Jeton[answer[i]].Points * 2; 
-                        }
-                        else if (monplateau.Board[ligne, colonne - i] == '2') //Lettre triple
-                        {
-                            score += Jeton[answer[i]].Points * 3;
-                        }
-                        else if (monplateau.Board[ligne, colonne - i] == '3') //Mot double
-                        {
-                            MotDouble = true;
-                            score += Jeton[answer[i]].Points;
-                        }
-                        else if (monplateau.Board[ligne, colonne - i] == '4') //Mot triple
-                        {
-                            MotTriple = true;
-                            score += Jeton[answer[i]].Points;
-                        }
-                        else if (monplateau.Board[ligne, colonne - i] == '_') score += Jeton[answer[i]].Points;
-                        monplateau.Board[ligne, colonne - i] = answer[i];
-                    }
-
-                    else if (direction == 'h') //Si la direction choisie est le haut
-                    {
-                        //On vérifie ce qu'il y a dans la case (case vide, spéciale ou occuppée par la même lettre) et on agit en fontion de la situation
-                        if (monplateau.Board[ligne - i, colonne] == '1') //Lettre double
-                        {
-                            score += Jeton[answer[i]].Points * 2;
-                        }
-                        else if (monplateau.Board[ligne - i, colonne] == '2') //Lettre triple
-                        {
-                            score += Jeton[answer[i]].Points * 3;
-                        }
-                        else if (monplateau.Board[ligne - i, colonne] == '3') //Mot double
-                        {
-                            MotDouble = true;
-                            score += Jeton[answer[i]].Points;
-                        }
-                        else if (monplateau.Board[ligne - i, colonne] == '4') //Mot triple
-                        {
-                            MotTriple = true;
-                            score += Jeton[answer[i]].Points;
-                        }
-                        else if (monplateau.Board[ligne - i, colonne] == '_') score += Jeton[answer[i]].Points;
-                        monplateau.Board[ligne - i, colonne] = answer[i];
-                    }
-
-                    else if (direction == 'b') //Si la direction choisie est le bas
-                    {
-                        //On vérifie ce qu'il y a dans la case (case vide, spéciale ou occuppée par la même lettre) et on agit en fontion de la situation
-                        if (monplateau.Board[ligne + i, colonne] == '1') //Lettre double
-                        {
-                            score += Jeton[answer[i]].Points * 2;
-                        }
-                        else if (monplateau.Board[ligne + i, colonne] == '2') //Lettre triple
-                        {
-                            score += Jeton[answer[i]].Points * 3;
-                        }
-                        else if (monplateau.Board[ligne + i, colonne] == '3') //Mot double
-                        {
-                            MotDouble = true;
-                            score += Jeton[answer[i]].Points;
-                        }
-                        else if (monplateau.Board[ligne + i, colonne] == '4') //Mot triple
-                        {
-                            MotTriple = true;
-                            score += Jeton[answer[i]].Points;
-                        }
-                        else if (monplateau.Board[ligne + i, colonne] == '_') score += Jeton[answer[i]].Points;
-                        monplateau.Board[ligne + i, colonne] = answer[i];
-                    }
-                }
-
-                P[PlayerTurn].Add_Mot(answer); //On rajoute le mot à la liste de mots trouvés
-
-                //On rajoute ses points à son score
-                if (MotDouble) P[PlayerTurn].Score += 2 * score;
-                if (MotTriple) P[PlayerTurn].Score += 3 * score;
-                else P[PlayerTurn].Score += score;
-
-                //On enlève ses jetons utilisés de sa main
-                for (int i = 0; i < monplateau.Jetons.Count; i++)
-                    P[PlayerTurn].Remove_Main_Courante(monplateau.Jetons[i]);
-
-                //On affiche ses informations ainsi que le plateau
-                Console.WriteLine(P[PlayerTurn].toString());
-                monplateau.toString();
 
                 PasserLeTour: Console.WriteLine("Vous avez terminé votre tour ou votre temps est écoulé. Nous allons donc passer au joueur suivant");
                 
@@ -281,7 +316,7 @@ namespace Projet_Scrabble
                 TimerTotal = DateTime.Now - GameStart;
             }
 
-
+            //Enregistrement de la partie ? Possibilité de reprendre en cours de partie ? Test unitaire ? Class Jeton ? Class Dictionnaire ? Class Sac_Jetons ?
 
             Console.ReadKey();
         }
