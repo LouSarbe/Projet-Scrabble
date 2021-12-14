@@ -13,9 +13,9 @@ namespace Projet_Scrabble
         //Déclaration des attributs
         string nom;
         int score = 0;
-        List<string> mots = null;
+        List<string> mots = new List<string>();
         List<Jeton> jetons = new List<Jeton>();
-        SortedList<char, int> valeur;
+        SortedList<char, int> valeur = new SortedList<char, int>();
 
 
         //Propriétés
@@ -106,12 +106,8 @@ namespace Projet_Scrabble
 
         public string toString() //Affiche le nom du joueur, son score, son nombre de mots trouvés et sa main
         {
-            string ret = "\n\nLe joueur " + nom + " a actuellement " + score + " point(s) et a trouvé " + mots.Count + " mot(s).\nIl a dans sa main : ";
-            for (int i = 0; i < jetons.Count - 1; i++)
-            {
-                ret += jetons[i] + ", ";
-            }
-            ret += " et " + jetons[jetons.Count - 1];
+            string ret = "\n\nLe joueur " + nom + " a actuellement " + score + " point(s) et a trouvé " + mots.Count + " mot(s).\n\nIl a dans sa main : ";
+            for (int i = 0; i < jetons.Count; i++) ret += "\n" + jetons[i].toString() + ", ";
             return ret;
         }
 

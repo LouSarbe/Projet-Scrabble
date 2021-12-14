@@ -13,7 +13,7 @@ namespace Projet_Scrabble
         char[,] plateau;
 
 
-        List<char> jetons; //Initie une liste qui nous donnera les jetons utilisés pendant le placement d'un nouveau mot
+        List<char> jetons = new List<char>(); //Initie une liste qui nous donnera les jetons utilisés pendant le placement d'un nouveau mot
 
         //Propriétés
         public char[,] Board

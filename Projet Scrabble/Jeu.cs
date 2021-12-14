@@ -19,8 +19,8 @@ namespace Projet_Scrabble
 
             //Configuration du nombre de joueur
             Console.WriteLine("Ceci est un jeu de scrabble. Nous allons commencer à jouer, veuillez tout d'abord nous donner le nombre de joueurs");
-            int PlayerNumber = 0;
-            while (PlayerNumber != 2 || PlayerNumber != 3 || PlayerNumber != 4)
+            int PlayerNumber = Convert.ToInt32(Console.ReadLine());
+            while (PlayerNumber != 2 && PlayerNumber != 3 && PlayerNumber != 4)
             {
                 Console.WriteLine("Le scrabble se joue avec 2 à 4 joueurs");
                 PlayerNumber = Convert.ToInt32(Console.ReadLine());
@@ -94,7 +94,7 @@ namespace Projet_Scrabble
             bool possedejeton;
 
 
-            while (TimerTotal.TotalMinutes <= 6 && sac.Nombre > 0) //Début du jeu : le jeu s'arrête si on atteint 6 minutes
+            while (TimerTotal.TotalMinutes <= 30 && sac.Nombre > 0) //Début du jeu : le jeu s'arrête si on atteint 30 minutes
             {
                 //Initialisation des paramètres
                 answer = null;
@@ -124,6 +124,8 @@ namespace Projet_Scrabble
                 {
                     //Le joueur choisit un mot à  jouer
                     Console.WriteLine("\nQuel mot voulez vous placer ? ");
+                    answer = Convert.ToString(Console.ReadLine()).ToUpper(); //Enregistre la réponse de l'utilisateur, en lettres majuscules
+                    if (!mondico.RechDichoRecursif(answer)) Console.WriteLine("Le mot " + answer + " n'appartient pas au dictionnaire");
                     while (!mondico.RechDichoRecursif(answer))
                     {
                         answer = Convert.ToString(Console.ReadLine()).ToUpper(); //Enregistre la réponse de l'utilisateur, en lettres majuscules
@@ -134,7 +136,7 @@ namespace Projet_Scrabble
                     TimerTour = DateTime.Now - DebutTour;
                     if (TimerTour >= TimeAllowed) goto PasserLeTour;
 
-                    while (!monplateau.Test_Plateau(answer, ligne, colonne, direction))
+                    do
                     {
                         //Ligne de la première lettre
                         Console.WriteLine("Dans quelle ligne voulez vous mettre la première lettre ?");
@@ -159,7 +161,7 @@ namespace Projet_Scrabble
                         //Vérification du temps de tour
                         TimerTour = DateTime.Now - DebutTour;
                         if (TimerTour >= TimeAllowed) goto PasserLeTour;
-                    }
+                    } while (!monplateau.Test_Plateau(answer, ligne, colonne, direction));
 
                     //Boucle qui vérifie que le joueur a les bons jetons pour faire ce qu'il demande
                     for (int i = 0; i < monplateau.Jetons.Count; i++)
@@ -179,7 +181,7 @@ namespace Projet_Scrabble
 
                     if (!possedejeton) goto DEBUTDETOUR; //Si le joueur n'a pas les bons jetons, alors il est renvoyé au début de son tour
 
-                    //On place le mot dans le plateau
+                    //On place le mot dans le plateau et on s'occupe du score
                     for (int i = 0; i < answer.Length; i++)
                     {
 
