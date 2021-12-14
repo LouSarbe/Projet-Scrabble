@@ -3,58 +3,32 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace Projet_Scrabble
 {
     class Sac_Jetons
     {
-        /*
-        A;1;9
-        B;3;2
-        C;3;2
-        D;2;3
-        E;1;15
-        F;4;2
-        G;2;2
-        H;4;2
-        I;1;8
-        J;8;1
-        K;10;1
-        L;1;5
-        M;2;3
-        N;1;6
-        O;1;6
-        P;3;2
-        Q;8;1
-        R;1;6
-        S;1;6
-        T;1;6
-        U;1;6
-        V;4;2
-        W;10;1
-        X;10;1
-        Y;10;1
-        Z;10;1
-        *;0;2
-        */
         //Déclaration
         List<Jeton> sac;
         int nombre;
 
         //Propriétés
-        public List<char> Sac
+        public List<Jeton> Sac
         {
             get { return sac; }
         }
         public int Nombre
         {
             get { return nombre; }
+            set { nombre = value; }
         }
 
         //Constructeur
-        public Sac_Jetons()
+        public Sac_Jetons(string fichier)
         {
-            
+            sac = new List<Jeton>();
+            Lire(fichier);
         }
 
         //Opérations
@@ -72,9 +46,37 @@ namespace Projet_Scrabble
             string ret = "";
             for(int i = 0; i < nombre; i++)
             {
-                
+                ret += "\n" + sac[i].toString();
             }
             return ret;
+        }
+
+        public void Lire(string fichier)
+        {
+            StreamReader lecteur = new StreamReader(fichier); //On crée une variable qui lit le fichier
+            string ligne; //Chaque ligne du document sera tour à tour dans cette variable string
+            while (!lecteur.EndOfStream) //Boucle qui se termine à la fin du document
+            {
+                try 
+                {
+                    ligne = lecteur.ReadLine(); //La ligne prend la valeur de la dernière ligne non lue du document
+                    if (ligne != null && ligne != "") //On vérifie que la ligne a des informations
+                    {
+                        string[] infos = ligne.Split(';'); //On sépare les infos séparées par un ; dans un tableau de string tel que : (lettre, points, nombre)
+                        for(int i = 0; i < Convert.ToInt32(infos[2]); i++) //On répète l'opération autant de fois qu'il y a  de jeton
+                        {
+                            Jeton jeton = new Jeton(Convert.ToChar(infos[0]), Convert.ToInt32(infos[1])); //On crée un jeton (lettre, points)
+                            sac.Add(jeton); //On ajoute le jeton au sac
+                            nombre++; //J'ajoute à chaque jeton une unité au compteur de jetons dans le sac
+                        }
+                    }
+                }
+                catch (Exception e) //Vérification des erreurs
+                {
+                    Console.WriteLine(e.Message);
+                }
+            }
+            lecteur.Close(); //On ferme le lecteur une fois l'opération finie
         }
     }
 }
