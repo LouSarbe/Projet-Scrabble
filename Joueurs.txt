@@ -1,3 +1,0 @@
-toto;56;
-BAT;SEBUM;LEXEMES
-A;B;C;D;E;W;H

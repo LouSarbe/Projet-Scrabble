@@ -23,23 +23,15 @@ namespace Projet_Scrabble
         public Dictionnaire(string fichier)
         {
             dico = new List<string>[16];
-            for (int i = 0; i < 16; i++) //Pour toutes les longueurs de mots différentes
-            {
-                dico[i] = new List<string>(); //La ligne du tableau prend la valeur d'une liste de tous les mots qui ont ce nombre de mots
-            }
-            Lire(fichier);
-        }
 
+            for (int i = 0; i < 16; i++) dico[i] = new List<string>(); //On initie toutes les listes pour qu'elles ne soient pas null
 
-        //Opérations
-        public void Lire(string fichier)
-        {
             StreamReader lecteur = new StreamReader(fichier); //On initialise un lecteur de fichier
             string ligne; //On utilisera cette variable pour y stocker chaque ligne du fichier l'une après l'autre
             while (!lecteur.EndOfStream) //Tant que le fichier n'est pas complètement lu
             {
                 ligne = lecteur.ReadLine(); //ligne prend la valeur de la dernière ligne non lue
-                if (ligne != null && ligne != "" && ligne.Length > 1)
+                if (ligne != null && ligne != "" && ligne.Length > 2)
                 {
                     string[] mots = ligne.Split(' '); //On sépare les mots dans un tableau (un mot par case du tableau)
                     for (int i = 0; i < mots.Length; i++)
@@ -50,55 +42,27 @@ namespace Projet_Scrabble
             }
             lecteur.Close();
         }
+
+
+        //Opérations
         public string toString()
         {
-
+            string ret = "\n\nCeci est un dictionnaire de français.\nOn y trouve : ";
+            int total = 0;
+            for(int i = 2; i < 15; i++)
+            {
+                ret += dico[i].Count + " mots de " + i + " lettres.\n";
+                total += dico[i].Count;
+            }
+            ret += dico[15].Count + " mots de 15 lettres.";
+            ret += "\nCe qui nous fait un total de " + total + "mots.";
+            return ret;
         }
         public bool RechDichoRecursif(string mot)
         {
-
+            int longueur = mot.Length;
+            if (dico[longueur].Contains(mot)) return true;
+            else return false;
         }
     }
-    /*
-        public Dictionnary (string filename)
-        {
-            dictionnary = new List<string>[16];
-            for(int i = 0; i<16; i++)
-            {
-                dictionnary[i] = new List<string>();
-            }
-            ReadFile(filename);
-        }
-        public void ReadFile(string filename)
-        {
-            StreamReader reader = new StreamReader(filename);
-            string l;
-            while (!reader.EndOfStream)
-            {
-                l = reader.ReadLine();
-                if (l != null && l != "" && l.Length > 1)
-                {
-                    string[] tabString = l.Split(' ');
-                    for (int i = 0; i< tabString.Length; i++)
-                    {
-                        dictionnary[tabString[i].Length].Add(tabString[i]);
-                    }
-                }
-            }
-            reader.Close();
-        }
-        public override string ToString()
-        {
-            string s = "Le dictionnaire est composé de :";
-            for (int i = 2; i < 16; i++)
-            {
-                s += "\n" + dictionnary[i].Count + " mots de " + i + " lettres."; //les nombre de 2 chiffres sont comptés. ERREUR
-            }
-            return s;
-        }
-        public bool Research(string mot)
-        {
-            return false;
-        }
-    }*/
 }

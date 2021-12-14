@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace Projet_Scrabble
 {
@@ -14,6 +15,7 @@ namespace Projet_Scrabble
         int score = 0;
         List<string> mots = null;
         List<Jeton> jetons = new List<Jeton>();
+        SortedList<char, int> valeur;
 
 
         //Propriétés
@@ -36,11 +38,36 @@ namespace Projet_Scrabble
         {
             get { return nom; }
         }
+        public SortedList<char, int> Valeur
+        {
+            get { return valeur; }
+        }
 
         //Constructeur
         public Joueur(string nom) //Constructeur de base
         {
             this.nom = nom;
+
+            //Création d'une référence dans la classe joueur qui à chaque lettre connait une valeur
+            StreamReader lecteur = new StreamReader("Jetons.txt"); //On crée une variable qui lit le fichier
+            string ligne; //Chaque ligne du document sera tour à tour dans cette variable string
+            while (!lecteur.EndOfStream) //Boucle qui se termine à la fin du document
+            {
+                try
+                {
+                    ligne = lecteur.ReadLine(); //La ligne prend la valeur de la dernière ligne non lue du document
+                    if (ligne != null && ligne != "") //On vérifie que la ligne a des informations
+                    {
+                        string[] infos = ligne.Split(';'); //On sépare les infos séparées par un ; dans un tableau de string tel que : (lettre, points, nombre)
+                        valeur.Add(Convert.ToChar(infos[0]), Convert.ToInt32(infos[1]));
+                    }
+                }
+                catch (Exception e) //Vérification des erreurs
+                {
+                    Console.WriteLine(e.Message);
+                }
+            }
+            lecteur.Close(); //On ferme le lecteur une fois l'opération finie
         }
 
         public Joueur(string nom, int score, List<string> mots) //Constructeur particulier (joueur rejoint en cours de partie)
@@ -48,6 +75,27 @@ namespace Projet_Scrabble
             this.nom = nom;
             this.score = score;
             this.mots = mots;
+
+            //Création d'une référence dans la classe joueur qui à chaque lettre connait une valeur
+            StreamReader lecteur = new StreamReader("Jetons.txt"); //On crée une variable qui lit le fichier
+            string ligne; //Chaque ligne du document sera tour à tour dans cette variable string
+            while (!lecteur.EndOfStream) //Boucle qui se termine à la fin du document
+            {
+                try
+                {
+                    ligne = lecteur.ReadLine(); //La ligne prend la valeur de la dernière ligne non lue du document
+                    if (ligne != null && ligne != "") //On vérifie que la ligne a des informations
+                    {
+                        string[] infos = ligne.Split(';'); //On sépare les infos séparées par un ; dans un tableau de string tel que : (lettre, points, nombre)
+                        valeur.Add(Convert.ToChar(infos[0]), Convert.ToInt32(infos[1]));
+                    }
+                }
+                catch (Exception e) //Vérification des erreurs
+                {
+                    Console.WriteLine(e.Message);
+                }
+            }
+            lecteur.Close(); //On ferme le lecteur une fois l'opération finie
         }
 
         //Opérations

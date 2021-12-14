@@ -31,8 +31,12 @@ namespace Projet_Scrabble
         public Plateau() //Constructeur de base
         {
             plateau = new char[15, 15];
+            for(int i =0; i < 15; i++)
+            {
+                for (int j = 0; j < 15; j++) plateau[i, j] = '_';
+            }
         }
-        public Plateau(string fichier) //Constructeur particulier
+        /*public Plateau(string fichier) //Constructeur particulier
         {
             plateau = new char[15, 15];
             for(int i = 0; i < plateau.GetLength(0); i++)
@@ -42,7 +46,7 @@ namespace Projet_Scrabble
                     plateau[i, j] = fichier[2 * i + j * 30];
                 }
             }
-        }
+        }*/
 
         //Opérations
         public string toString()

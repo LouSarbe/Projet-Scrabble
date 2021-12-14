@@ -1,24 +1,26 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.IO;
 
 namespace Projet_Scrabble
 {
     class Jeu
-    {
+    { 
         static void Main(string[] args)
         {
             ConsoleKeyInfo cki; //Initialise la touche pressée
             Random r = new Random(); //Initialise l'aléatoire
 
-            //Initialisation temporaire du plateau
-            string fichier = "V;A;S;_;L;O;B;_;_;W;O;W;_;_;_;_;V;E;_;_;_;A;D;J;U;R;E;R;_;_;L; E;X;E;M;E;S;_;E;_;E;M;A;I;L;_; _;T;_;_;U;_;_;_;P;_;_;G;_;_;_; L;A;_;_;_;_;_;F;I;G;E;E;_;T;_; A;N;_;_;_;_;U;R;E;_;_;A;V;E;_; _;T;E;K;_;_;_;U;_;_;_;T;O;C;_; F;_;P;_;_;_;E;S;_;_;_;_;E;_;L; A;P;I;N;A;_;_;T;_;_;_;H;U;N;I; R;A;_;_;_;O;_;R;A;_;_;U;_;_;_; _;R;U;_;_;N;U;A;I;_;_;E;_;C;_; B;A;T;_;D;_;_;S;_;_;_;R;O;I;R; _;S;E;B;U;M;_;S;_;Q;_;A;_;_;A; D;O;_;A;_;I;R;R;_;U;N;I;O;N;_; _;L;_;T;_;_;_;_;M;E;_;T;U;_";
-
             //Création du dictionnaire
-            Dictionnaire mondico = new Dictionnaire();
-            
+            Dictionnaire mondico = new Dictionnaire("Francais.txt");
+
             //Configuration du nombre de joueur
             Console.WriteLine("Ceci est un jeu de scrabble. Nous allons commencer à jouer, veuillez tout d'abord nous donner le nombre de joueurs");
             int PlayerNumber = 0;
-            while(PlayerNumber != 2 || PlayerNumber != 3 || PlayerNumber != 4)
+            while (PlayerNumber != 2 || PlayerNumber != 3 || PlayerNumber != 4)
             {
                 Console.WriteLine("Le scrabble se joue avec 2 à 4 joueurs");
                 PlayerNumber = Convert.ToInt32(Console.ReadLine());
@@ -38,7 +40,7 @@ namespace Projet_Scrabble
             Joueur[] P = new Joueur[4];
             P[0] = P1;
             P[1] = P2;
-            
+
             if (PlayerNumber > 2) //Joueur 3 si il doit y en voir un
             {
                 Console.WriteLine("\n\nJoueur 3, donne moi ton nom pour cette partie :");
@@ -46,27 +48,19 @@ namespace Projet_Scrabble
                 P[2] = P3;
                 if (PlayerNumber > 3) //Joueur 4 si il doit y en avoir un
                 {
-                    Console.WriteLine("\n\nJoueur 4, donne moi ton nom pour cette partie :"); 
+                    Console.WriteLine("\n\nJoueur 4, donne moi ton nom pour cette partie :");
                     P4 = new Joueur(Convert.ToString(Console.ReadLine()));
                     P[3] = P4;
                 }
             }
 
+            string answer; //Création d'une string qui me servira à stocker les réponses utilisateur
+
             //Quel joueur commence la partie
             int PlayerTurn = r.Next(0, PlayerNumber);
 
             //Création du plateau
-            Console.WriteLine("\n\nVoulez-vous jouer avec un plateau vide, ou un plateau avec déjà un début de jeu ?\nMettez 1 pour vide ou 2 sinon : "); 
-            string answer = Convert.ToString(Console.Read());
-            while(answer != "1" && answer != "2") //On veut être sûr que l'utilisateur marque ce que l'on demande
-            {
-                Console.WriteLine("\n\nMerci de mettre 1 pour vide ou 2 sinon : ");
-                answer = Convert.ToString(Console.Read());
-            }
-
-            Plateau monplateau;
-            if (answer == "1") monplateau = new Plateau();
-            else monplateau = new Plateau(fichier);
+            Plateau monplateau = new Plateau();
 
             //Création des timers
             DateTime GameStart = DateTime.Now; //Heure du début du jeu
@@ -77,12 +71,12 @@ namespace Projet_Scrabble
             TimeSpan TimerTour = DateTime.Now - DebutTour; //Timer du tour
 
             //Initialisation du sac de jetons
-            Sac_Jetons sac = new Sac_Jetons();
+            Sac_Jetons sac = new Sac_Jetons("Jetons.txt");
 
             //Initialisation des mains
-            for(int i = 0; i < PlayerNumber; i++)
+            for (int i = 0; i < PlayerNumber; i++)
             {
-                for(int j = 0; j < 6; j++)
+                for (int j = 0; j < 6; j++)
                 {
                     P[i].Add_Main_Courante(sac.Retire_Jeton(r));
                 }
@@ -116,8 +110,8 @@ namespace Projet_Scrabble
 
                 DebutTour = DateTime.Now;
 
-                //Tour du joueur
-                DEBUTDETOUR:
+            //Tour du joueur
+            DEBUTDETOUR:
                 Console.WriteLine("\n\nC'est au tour de " + P[PlayerTurn].Nom + " de jouer !\n" + P[PlayerTurn].toString()); //Affiche le joueur qui doit jouer et ses attributs
                 Console.WriteLine("\n\n" + monplateau.toString());
 
@@ -168,16 +162,16 @@ namespace Projet_Scrabble
                     }
 
                     //Boucle qui vérifie que le joueur a les bons jetons pour faire ce qu'il demande
-                    for(int i = 0; i < monplateau.Jetons.Count; i++)
+                    for (int i = 0; i < monplateau.Jetons.Count; i++)
                     {
                         while (possedejeton)
                         {
                             //Vérifie que le joueur a le jeton correspondant ou un jeton joker
-                            if (!P[PlayerTurn].Jetons.Contains(Jeton[monplateau.Jetons[i]]) && !P[PlayerTurn].Jetons.Contains(Jeton['*'])) possedejeton = false; 
-                            else if (P[PlayerTurn].Jetons.Contains(Jeton['*'])) //Si le joueur utilise un joker, il est retiré instantanément
+                            if (!P[PlayerTurn].Jetons.Contains(new Jeton(monplateau.Jetons[i], P[PlayerTurn].Valeur[monplateau.Jetons[i]])) && !P[PlayerTurn].Jetons.Contains(new Jeton('*', P[PlayerTurn].Valeur['*']))) possedejeton = false;
+                            else if (P[PlayerTurn].Jetons.Contains(new Jeton('*', P[PlayerTurn].Valeur['*']))) //Si le joueur utilise un joker, il est retiré instantanément
                             {
                                 monplateau.Jetons.RemoveAt(i);
-                                P[PlayerTurn].Jetons.Remove(Jeton['*']);
+                                P[PlayerTurn].Jetons.Remove(new Jeton('*', P[PlayerTurn].Valeur['*']));
                             }
 
                         }
@@ -194,23 +188,23 @@ namespace Projet_Scrabble
                             //On vérifie ce qu'il y a dans la case (case vide, spéciale ou occuppée par la même lettre) et on agit en fontion de la situation
                             if (monplateau.Board[ligne, colonne + i] == '1') //Lettre double
                             {
-                                score += Jeton[answer[i]].Points * 2;
+                                score += P[PlayerTurn].Valeur[answer[i]] * 2;
                             }
                             else if (monplateau.Board[ligne, colonne + i] == '2') //Lettre triple
                             {
-                                score += Jeton[answer[i]].Points * 3;
+                                score += P[PlayerTurn].Valeur[answer[i]] * 3;
                             }
                             else if (monplateau.Board[ligne, colonne + i] == '3') //Mot double
                             {
                                 MotDouble = true;
-                                score += Jeton[answer[i]].Points;
+                                score += P[PlayerTurn].Valeur[answer[i]];
                             }
                             else if (monplateau.Board[ligne, colonne + i] == '4') //Mot triple
                             {
                                 MotTriple = true;
-                                score += Jeton[answer[i]].Points;
+                                score += P[PlayerTurn].Valeur[answer[i]];
                             }
-                            else if (monplateau.Board[ligne, colonne + i] == '_') score += Jeton[answer[i]].Points; //Case vide
+                            else if (monplateau.Board[ligne, colonne + i] == '_') score += P[PlayerTurn].Valeur[answer[i]]; //Case vide
                             monplateau.Board[ligne, colonne + i] = answer[i];
                         }
 
@@ -219,23 +213,23 @@ namespace Projet_Scrabble
                             //On vérifie ce qu'il y a dans la case (case vide, spéciale ou occuppée par la même lettre) et on agit en fontion de la situation
                             if (monplateau.Board[ligne, colonne - i] == '1') //Lettre double
                             {
-                                score += Jeton[answer[i]].Points * 2;
+                                score += P[PlayerTurn].Valeur[answer[i]] * 2;
                             }
                             else if (monplateau.Board[ligne, colonne - i] == '2') //Lettre triple
                             {
-                                score += Jeton[answer[i]].Points * 3;
+                                score += P[PlayerTurn].Valeur[answer[i]] * 3;
                             }
                             else if (monplateau.Board[ligne, colonne - i] == '3') //Mot double
                             {
                                 MotDouble = true;
-                                score += Jeton[answer[i]].Points;
+                                score += P[PlayerTurn].Valeur[answer[i]];
                             }
                             else if (monplateau.Board[ligne, colonne - i] == '4') //Mot triple
                             {
                                 MotTriple = true;
-                                score += Jeton[answer[i]].Points;
+                                score += P[PlayerTurn].Valeur[answer[i]];
                             }
-                            else if (monplateau.Board[ligne, colonne - i] == '_') score += Jeton[answer[i]].Points;
+                            else if (monplateau.Board[ligne, colonne - i] == '_') score += P[PlayerTurn].Valeur[answer[i]];
                             monplateau.Board[ligne, colonne - i] = answer[i];
                         }
 
@@ -244,23 +238,23 @@ namespace Projet_Scrabble
                             //On vérifie ce qu'il y a dans la case (case vide, spéciale ou occuppée par la même lettre) et on agit en fontion de la situation
                             if (monplateau.Board[ligne - i, colonne] == '1') //Lettre double
                             {
-                                score += Jeton[answer[i]].Points * 2;
+                                score += P[PlayerTurn].Valeur[answer[i]] * 2;
                             }
                             else if (monplateau.Board[ligne - i, colonne] == '2') //Lettre triple
                             {
-                                score += Jeton[answer[i]].Points * 3;
+                                score += P[PlayerTurn].Valeur[answer[i]] * 3;
                             }
                             else if (monplateau.Board[ligne - i, colonne] == '3') //Mot double
                             {
                                 MotDouble = true;
-                                score += Jeton[answer[i]].Points;
+                                score += P[PlayerTurn].Valeur[answer[i]];
                             }
                             else if (monplateau.Board[ligne - i, colonne] == '4') //Mot triple
                             {
                                 MotTriple = true;
-                                score += Jeton[answer[i]].Points;
+                                score += P[PlayerTurn].Valeur[answer[i]];
                             }
-                            else if (monplateau.Board[ligne - i, colonne] == '_') score += Jeton[answer[i]].Points;
+                            else if (monplateau.Board[ligne - i, colonne] == '_') score += P[PlayerTurn].Valeur[answer[i]];
                             monplateau.Board[ligne - i, colonne] = answer[i];
                         }
 
@@ -269,23 +263,23 @@ namespace Projet_Scrabble
                             //On vérifie ce qu'il y a dans la case (case vide, spéciale ou occuppée par la même lettre) et on agit en fontion de la situation
                             if (monplateau.Board[ligne + i, colonne] == '1') //Lettre double
                             {
-                                score += Jeton[answer[i]].Points * 2;
+                                score += P[PlayerTurn].Valeur[answer[i]] * 2;
                             }
                             else if (monplateau.Board[ligne + i, colonne] == '2') //Lettre triple
                             {
-                                score += Jeton[answer[i]].Points * 3;
+                                score += P[PlayerTurn].Valeur[answer[i]] * 3;
                             }
                             else if (monplateau.Board[ligne + i, colonne] == '3') //Mot double
                             {
                                 MotDouble = true;
-                                score += Jeton[answer[i]].Points;
+                                score += P[PlayerTurn].Valeur[answer[i]];
                             }
                             else if (monplateau.Board[ligne + i, colonne] == '4') //Mot triple
                             {
                                 MotTriple = true;
-                                score += Jeton[answer[i]].Points;
+                                score += P[PlayerTurn].Valeur[answer[i]];
                             }
-                            else if (monplateau.Board[ligne + i, colonne] == '_') score += Jeton[answer[i]].Points;
+                            else if (monplateau.Board[ligne + i, colonne] == '_') score += P[PlayerTurn].Valeur[answer[i]];
                             monplateau.Board[ligne + i, colonne] = answer[i];
                         }
                     }
@@ -299,15 +293,15 @@ namespace Projet_Scrabble
 
                     //On enlève ses jetons utilisés de sa main
                     for (int i = 0; i < monplateau.Jetons.Count; i++)
-                        P[PlayerTurn].Remove_Main_Courante(monplateau.Jetons[i]);
+                        P[PlayerTurn].Remove_Main_Courante(new Jeton(monplateau.Jetons[i], P[PlayerTurn].Valeur[monplateau.Jetons[i]]));
 
                     //On affiche ses informations ainsi que le plateau
                     Console.WriteLine(P[PlayerTurn].toString());
                     monplateau.toString();
                 }
 
-                PasserLeTour: Console.WriteLine("Vous avez terminé votre tour ou votre temps est écoulé. Nous allons donc passer au joueur suivant");
-                
+            PasserLeTour: Console.WriteLine("Vous avez terminé votre tour ou votre temps est écoulé. Nous allons donc passer au joueur suivant");
+
                 //On change le joueur qui va jouer ensuite
                 if (PlayerTurn + 1 < PlayerNumber) PlayerTurn++;
                 else PlayerTurn = 0;
@@ -316,9 +310,7 @@ namespace Projet_Scrabble
                 TimerTotal = DateTime.Now - GameStart;
             }
 
-            //Enregistrement de la partie ? Possibilité de reprendre en cours de partie ? Test unitaire ? Class Jeton ? Class Dictionnaire ? Class Sac_Jetons ?
-
-            Console.ReadKey();
+            //Enregistrement de la partie ? Possibilité de reprendre en cours de partie ? Test unitaire ? Gestion de la main ? Commencer au milieu ?
         }
     }
 }
