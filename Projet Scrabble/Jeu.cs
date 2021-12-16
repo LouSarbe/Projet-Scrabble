@@ -167,7 +167,7 @@ namespace Projet_Scrabble
                     //Boucle qui vérifie que le joueur a les bons jetons pour faire ce qu'il demande
                     for (int i = 0; i < monplateau.Jetons.Count; i++)
                     {
-                        while (possedejeton)
+                        if (possedejeton)
                         {
                             //Vérifie que le joueur a le jeton correspondant ou un jeton joker
                             if (!P[PlayerTurn].Existe(monplateau.Jetons[i]) && !P[PlayerTurn].Existe('*')) possedejeton = false;
@@ -176,7 +176,6 @@ namespace Projet_Scrabble
                                 monplateau.Jetons.RemoveAt(i);
                                 P[PlayerTurn].Remove_Main_Courante('*');
                             }
-
                         }
                     }
 
