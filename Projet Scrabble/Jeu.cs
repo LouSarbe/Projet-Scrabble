@@ -65,7 +65,7 @@ namespace Projet_Scrabble
             //Création des timers
             DateTime GameStart = DateTime.Now; //Heure du début du jeu
             TimeSpan TimerTotal = DateTime.Now - GameStart; //Timer total de la session de jeu
-            Console.WriteLine("Combien de secondes voulez vous avoir à chaque tour de jeu ?");
+            Console.WriteLine("\n\nCombien de secondes voulez vous avoir à chaque tour de jeu ?");
             TimeSpan TimeAllowed = new TimeSpan(0, 0, Convert.ToInt32(Console.ReadLine())); //Nombre de secondes par tour
             DateTime DebutTour = DateTime.Now; //Heure du début de tour
             TimeSpan TimerTour = DateTime.Now - DebutTour; //Timer du tour
@@ -104,7 +104,6 @@ namespace Projet_Scrabble
                 int colonne = 0;
                 char direction = 'd';
                 score = 0;
-                possedejeton = true;
 
                 P[PlayerTurn].Add_Main_Courante(sac.Retire_Jeton(r));
 
@@ -112,25 +111,27 @@ namespace Projet_Scrabble
 
             //Tour du joueur
             DEBUTDETOUR:
+                possedejeton = true;
                 Console.WriteLine("\n\nC'est au tour de " + P[PlayerTurn].Nom + " de jouer !\n" + P[PlayerTurn].toString()); //Affiche le joueur qui doit jouer et ses attributs
                 Console.WriteLine("\n\n" + monplateau.toString());
 
                 //Vérification du temps de tour
-                Console.WriteLine("Si vous voulez passer votre tour, appuyez sur espace. Sinon appuyez sur une autre touche");
-                cki = Console.ReadKey();
                 TimerTour = DateTime.Now - DebutTour;
-                if (cki.Key == ConsoleKey.Spacebar || TimerTour >= TimeAllowed) goto PasserLeTour; //Si le joueur appuie sur espace, il passe le tour sans poser de mot
+                if (TimerTour >= TimeAllowed) goto PasserLeTour;
+
                 else
                 {
                     //Le joueur choisit un mot à  jouer
                     Console.WriteLine("\nQuel mot voulez vous placer ? ");
-                    answer = Convert.ToString(Console.ReadLine()).ToUpper(); //Enregistre la réponse de l'utilisateur, en lettres majuscules
-                    if (!mondico.RechDichoRecursif(answer)) Console.WriteLine("Le mot " + answer + " n'appartient pas au dictionnaire");
-                    while (!mondico.RechDichoRecursif(answer))
+                    do
                     {
+                        Console.WriteLine("Si vous voulez passer votre tour, appuyez sur espace. Sinon appuyez sur n'importe quelle touche");
+                        cki = Console.ReadKey();
+                        if (cki.Key == ConsoleKey.Spacebar) goto PasserLeTour; //Si le joueur appuie sur espace, il passe le tour sans poser de mot
+                        Console.WriteLine("Quel mot voulez vous placer ?");
                         answer = Convert.ToString(Console.ReadLine()).ToUpper(); //Enregistre la réponse de l'utilisateur, en lettres majuscules
-                        if (!mondico.RechDichoRecursif(answer)) Console.WriteLine("Le mot " + answer + " n'appartient pas au dictionnaire");
-                    }
+                        if (!mondico.RechercheMot(answer)) Console.WriteLine("Le mot " + answer + " n'appartient pas au dictionnaire");
+                    } while (!mondico.RechercheMot(answer));
 
                     //Vérification du temps de tour
                     TimerTour = DateTime.Now - DebutTour;
@@ -140,7 +141,7 @@ namespace Projet_Scrabble
                     {
                         //Ligne de la première lettre
                         Console.WriteLine("Dans quelle ligne voulez vous mettre la première lettre ?");
-                        ligne = Convert.ToInt32(Console.ReadLine());
+                        ligne = Convert.ToInt32(Console.ReadLine()) - 1;
 
                         //Vérification du temps de tour
                         TimerTour = DateTime.Now - DebutTour;
@@ -148,7 +149,7 @@ namespace Projet_Scrabble
 
                         //Colonne de la première lettre
                         Console.WriteLine("Dans quelle colonne voulez vous mettre la première lettre ?");
-                        colonne = Convert.ToInt32(Console.ReadLine());
+                        colonne = Convert.ToInt32(Console.ReadLine()) - 1;
 
                         //Vérification du temps de tour
                         TimerTour = DateTime.Now - DebutTour;
@@ -169,17 +170,23 @@ namespace Projet_Scrabble
                         while (possedejeton)
                         {
                             //Vérifie que le joueur a le jeton correspondant ou un jeton joker
-                            if (!P[PlayerTurn].Jetons.Contains(new Jeton(monplateau.Jetons[i], P[PlayerTurn].Valeur[monplateau.Jetons[i]])) && !P[PlayerTurn].Jetons.Contains(new Jeton('*', P[PlayerTurn].Valeur['*']))) possedejeton = false;
-                            else if (P[PlayerTurn].Jetons.Contains(new Jeton('*', P[PlayerTurn].Valeur['*']))) //Si le joueur utilise un joker, il est retiré instantanément
+                            if (!P[PlayerTurn].Existe(monplateau.Jetons[i]) && !P[PlayerTurn].Existe('*')) possedejeton = false;
+                            else if (P[PlayerTurn].Existe('*')) //Si le joueur utilise un joker, il est retiré instantanément
                             {
                                 monplateau.Jetons.RemoveAt(i);
-                                P[PlayerTurn].Jetons.Remove(new Jeton('*', P[PlayerTurn].Valeur['*']));
+                                P[PlayerTurn].Remove_Main_Courante('*');
                             }
 
                         }
                     }
 
-                    if (!possedejeton) goto DEBUTDETOUR; //Si le joueur n'a pas les bons jetons, alors il est renvoyé au début de son tour
+                    if (!possedejeton) //Si le joueur n'a pas les bons jetons, alors il est renvoyé au début de son tour
+
+                    {
+                        Console.WriteLine("Vous n'avez pas les bons jetons, veuillez recommencer votre tour !");
+                        goto DEBUTDETOUR;
+                    }
+
 
                     //On place le mot dans le plateau et on s'occupe du score
                     for (int i = 0; i < answer.Length; i++)
@@ -295,7 +302,7 @@ namespace Projet_Scrabble
 
                     //On enlève ses jetons utilisés de sa main
                     for (int i = 0; i < monplateau.Jetons.Count; i++)
-                        P[PlayerTurn].Remove_Main_Courante(new Jeton(monplateau.Jetons[i], P[PlayerTurn].Valeur[monplateau.Jetons[i]]));
+                        P[PlayerTurn].Remove_Main_Courante(monplateau.Jetons[i]);
 
                     //On affiche ses informations ainsi que le plateau
                     Console.WriteLine(P[PlayerTurn].toString());

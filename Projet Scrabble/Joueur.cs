@@ -119,9 +119,26 @@ namespace Projet_Scrabble
         {
             jetons.Add(monjeton);
         }
-        public void Remove_Main_Courante(Jeton monjeton)
+        public void Remove_Main_Courante(char jeton)
         {
-            jetons.Remove(monjeton);
+            bool stop = false;
+            for(int i = 0; i < jetons.Count; i++)
+            {
+                while (!stop)
+                {
+                    if (jetons[i].Char == jeton)
+                    {
+                        jetons.RemoveAt(i);
+                        stop = true;
+                    }
+                }
+            }
+        }
+        public bool Existe(char jeton)
+        {
+            bool ret = false;
+            for (int i = 0; i < jetons.Count; i++) if (jetons[i].Char == jeton) ret = true;
+            return ret;
         }
     }
 }

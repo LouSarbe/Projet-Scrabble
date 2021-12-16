@@ -58,11 +58,21 @@ namespace Projet_Scrabble
             ret += "\nCe qui nous fait un total de " + total + "mots.";
             return ret;
         }
-        public bool RechDichoRecursif(string mot)
+
+        public bool RechercheMot(string mot)
         {
-            int longueur = mot.Length;
-            if (dico[longueur].Contains(mot)) return true;
-            else return false;
+            return RechDichoRecursif(mot, dico[mot.Length], 0, dico[mot.Length].Count);
+        }
+        public bool RechDichoRecursif(string mot, List<string> mots, int debut, int fin)
+        {
+            if (debut > fin) return false;
+            int milieu = (debut + fin) / 2;
+            if (mot.CompareTo(mots[milieu]) == 0) return true;
+            else if (mot.CompareTo(mots[(debut + fin) / 2]) < 0) return RechDichoRecursif(mot,mots , debut, milieu - 1);
+            else return RechDichoRecursif(mot, mots, milieu + 1, fin);
+            //int longueur = mot.Length;
+            //if (dico[longueur].Contains(mot)) return true;
+            //else return false;
         }
     }
 }

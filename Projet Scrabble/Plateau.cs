@@ -56,6 +56,7 @@ namespace Projet_Scrabble
             {
                 for (int j = 0; j < plateau.GetLength(1) - 1; j++)
                 {
+                    if (plateau[i, j] == '1' || plateau[i, j] == '2' || plateau[i, j] == '3' || plateau[i, j] == '4') ret += "_ ";
                     ret += plateau[i, j] + " ";
                 }
                 ret += plateau[i, plateau.GetLength(1) - 1] + "\n";
