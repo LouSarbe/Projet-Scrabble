@@ -45,6 +45,11 @@ namespace Projet_Scrabble
 
 
         //Opérations
+
+        /// <summary>
+        /// Affiche le nombre de mots par longueur de mot, ainsi que le nombre total de mots du dictionnaire
+        /// </summary>
+        /// <returns>Retourne un string présentant la description</returns>
         public string toString()
         {
             string ret = "\n\nCeci est un dictionnaire de français.\nOn y trouve : ";
@@ -59,10 +64,24 @@ namespace Projet_Scrabble
             return ret;
         }
 
+        /// <summary>
+        /// Intermédiaire entre le main et la recherche dichotomique (envoie le mot à trouver et la liste dans laquelle chercher
+        /// </summary>
+        /// <param name="mot"></param>
+        /// <returns>renvoie le retour de la recherche dichotomique (true si le mot existe, false sinon)</returns>
         public bool RechercheMot(string mot)
         {
             return RechDichoRecursif(mot, dico[mot.Length], 0, dico[mot.Length].Count);
         }
+
+        /// <summary>
+        /// Recherche dichotomique récursive, vérifie si le mot donné en paramètre est dans la liste donnée en paramètre
+        /// </summary>
+        /// <param name="mot"></param>
+        /// <param name="mots"></param>
+        /// <param name="debut"></param>
+        /// <param name="fin"></param>
+        /// <returns>true si le mot en paramètre existe, false sinon</returns>
         public bool RechDichoRecursif(string mot, List<string> mots, int debut, int fin)
         {
             if (debut > fin) return false;

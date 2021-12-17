@@ -56,6 +56,12 @@ namespace Projet_Scrabble
         }
 
         //Opérations
+
+        /// <summary>
+        /// Tire un jeton du sac, afin de l'ajouter à la main d'un joueur, permet aussi de mettre à jour le nombre de jetons dans le sac
+        /// </summary>
+        /// <param name="r"></param>
+        /// <returns>renvoie le jeton tiré du sac</returns>
         public Jeton Retire_Jeton(Random r)
         {
             Jeton ret;

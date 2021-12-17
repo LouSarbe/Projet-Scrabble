@@ -30,6 +30,11 @@ namespace Projet_Scrabble
         }
 
         //Opérations
+
+        /// <summary>
+        /// affiche la valeur et la lettre du jeton
+        /// </summary>
+        /// <returns>retourne un string qui présente le jeton</returns>
         public string toString()
         {
             return "Jeton : " + jeton + " \t Valeur : " + points + " point(s)";

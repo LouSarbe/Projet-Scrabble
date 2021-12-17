@@ -111,6 +111,11 @@ namespace Projet_Scrabble
         }*/
 
         //Opérations
+
+        /// <summary>
+        /// Affiche le plateau de jeu (les cases spéciales sont affichées comme vides)
+        /// </summary>
+        /// <returns>Un string comportant l'affichage entier du plateau</returns>
         public string toString()
         {
             string ret = "\n\n";
@@ -126,7 +131,14 @@ namespace Projet_Scrabble
             return ret;
         }
 
-
+        /// <summary>
+        /// Teste qu'un mot donné par un joueur peut-être placé dans le plateau, dans la direction et la position donnée par le joueur. Additionnellement, permet de savoir quels jetons le joueur va utiliser lors de son tour
+        /// </summary>
+        /// <param name="mot"></param>
+        /// <param name="ligne"></param>
+        /// <param name="colonne"></param>
+        /// <param name="direction"></param>
+        /// <returns>true si tout est bon, false si il y a un problème (avec un message d'erreur selon le problème)</returns>
         public bool Test_Plateau(string mot, int ligne, int colonne, char direction)
         {
             bool ret = true;

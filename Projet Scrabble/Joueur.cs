@@ -99,11 +99,20 @@ namespace Projet_Scrabble
         }
 
         //Opérations
+
+        /// <summary>
+        /// Ajoute un mot à la liste
+        /// </summary>
+        /// <param name="mot"></param>
         public void Add_Mot(string mot)
         {
             mots.Add(mot);
         }
 
+        /// <summary>
+        /// Affiche une chaine comportant le nom du joueur son score et le nombre de mots qu'il a trouvé
+        /// </summary>
+        /// <returns>string présentant le joueur</returns>
         public string toString() //Affiche le nom du joueur, son score, son nombre de mots trouvés et sa main
         {
             string ret = "\n\nLe joueur " + nom + " a actuellement " + score + " point(s) et a trouvé " + mots.Count + " mot(s).\n\nIl a dans sa main : ";
@@ -111,14 +120,28 @@ namespace Projet_Scrabble
             return ret;
         }
 
+        /// <summary>
+        /// Ajoute au score du joueur sélectionné la valeur en paramètre
+        /// </summary>
+        /// <param name="val"></param>
         public void Add_Score(int val)
         {
             score += val;
         }
+
+        /// <summary>
+        /// Ajoute un jeton (de la pioche) dans la main courante
+        /// </summary>
+        /// <param name="monjeton"></param>
         public void Add_Main_Courante(Jeton monjeton)
         {
             jetons.Add(monjeton);
         }
+
+        /// <summary>
+        /// Enlève un jeton de la main du joueur (après que celui-ci ait été placé sur le jeu)
+        /// </summary>
+        /// <param name="jeton"></param>
         public void Remove_Main_Courante(char jeton)
         {
             bool stop = false;
@@ -131,6 +154,12 @@ namespace Projet_Scrabble
                 }
             }
         }
+
+        /// <summary>
+        /// Vérifie si un jeton est dans la main du joueur
+        /// </summary>
+        /// <param name="jeton"></param>
+        /// <returns>true si le joueur possède le jeton, false sinon</returns>
         public bool Existe(char jeton)
         {
             bool ret = false;
