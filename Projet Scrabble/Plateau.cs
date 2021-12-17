@@ -34,6 +34,66 @@ namespace Projet_Scrabble
             for(int i =0; i < 15; i++)
             {
                 for (int j = 0; j < 15; j++) plateau[i, j] = '_';
+                plateau[0, 0] = '4';
+                plateau[0, 7] = '4';
+                plateau[0, 14] = '4';
+                plateau[7, 0] = '4';
+                plateau[14, 0] = '4';
+                plateau[14, 14] = '4';
+                plateau[14, 7] = '4';
+                plateau[7, 14] = '4';
+                plateau[1, 1] = '3';
+                plateau[2, 2] = '3';
+                plateau[3, 3] = '3';
+                plateau[4, 4] = '3';
+                plateau[13, 1] = '3';
+                plateau[12, 2] = '3';
+                plateau[11, 3] = '3';
+                plateau[10, 4] = '3';
+                plateau[10, 10] = '3';
+                plateau[11, 11] = '3';
+                plateau[12, 12] = '3';
+                plateau[13, 13] = '3';
+                plateau[4, 10] = '3';
+                plateau[3, 11] = '3';
+                plateau[2, 12] = '3';
+                plateau[1, 13] = '3';
+                plateau[5, 1] = '2';
+                plateau[9, 1] = '2';
+                plateau[5, 13] = '2';
+                plateau[9, 13] = '2';
+                plateau[1, 5] = '2';
+                plateau[5, 5] = '2';
+                plateau[9, 5] = '2';
+                plateau[13, 5] = '2';
+                plateau[1, 9] = '2';
+                plateau[5, 9] = '2';
+                plateau[9, 9] = '2';
+                plateau[13, 9] = '2';
+                plateau[3, 0] = '1';
+                plateau[11, 0] = '1';
+                plateau[0, 3] = '1';
+                plateau[0, 11] = '1';
+                plateau[6, 2] = '1';
+                plateau[2, 6] = '1';
+                plateau[8, 2] = '1';
+                plateau[2, 8] = '1';
+                plateau[7, 3] = '1';
+                plateau[3, 7] = '1';
+                plateau[6, 6] = '1';
+                plateau[8, 8] = '1';
+                plateau[6, 8] = '1';
+                plateau[8, 6] = '1';
+                plateau[14, 3] = '1';
+                plateau[3, 14] = '1';
+                plateau[14, 11] = '1';
+                plateau[11, 14] = '1';
+                plateau[7, 11] = '1';
+                plateau[11, 7] = '1';
+                plateau[6, 12] = '1';
+                plateau[12, 6] = '1';
+                plateau[8, 12] = '1';
+                plateau[12, 8] = '1';
             }
         }
         /*public Plateau(string fichier) //Constructeur particulier
@@ -54,12 +114,12 @@ namespace Projet_Scrabble
             string ret = "\n\n";
             for (int i = 0; i < plateau.GetLength(0); i++)
             {
-                for (int j = 0; j < plateau.GetLength(1) - 1; j++)
+                for (int j = 0; j < plateau.GetLength(1); j++)
                 {
                     if (plateau[i, j] == '1' || plateau[i, j] == '2' || plateau[i, j] == '3' || plateau[i, j] == '4') ret += "_ ";
-                    ret += plateau[i, j] + " ";
+                    else ret += plateau[i, j] + " ";
                 }
-                ret += plateau[i, plateau.GetLength(1) - 1] + "\n";
+                ret += "\n";
             }
             return ret;
         }

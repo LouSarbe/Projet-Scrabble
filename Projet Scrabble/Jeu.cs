@@ -317,7 +317,7 @@ namespace Projet_Scrabble
                 TimerTotal = DateTime.Now - GameStart;
             }
 
-            //Enregistrement de la partie ? Possibilité de reprendre en cours de partie ? Test unitaire ? Gestion de la main ? Commencer au milieu ?
+            //Enregistrement de la partie ? Possibilité de reprendre en cours de partie ? Test unitaire ? Commencer au milieu ?
         }
     }
 }
