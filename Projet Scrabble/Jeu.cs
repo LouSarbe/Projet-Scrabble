@@ -317,7 +317,28 @@ namespace Projet_Scrabble
                 TimerTotal = DateTime.Now - GameStart;
             }
 
-            //Enregistrement de la partie ? Possibilité de reprendre en cours de partie ? Test unitaire ? Commencer au milieu ?
+            //Affichage de fin de partie
+            if (sac.Nombre == 0) Console.WriteLine("\n\nLe jeu est terminé, il n'y a plus de jeton dans la pioche !"); //Si le sac est vide
+            else Console.WriteLine("\n\nLe jeu est terminé, le temps total est écoulé."); //Si le temps est écoulé
+
+            //Affiche les caractéristiques des joueurs
+            Console.WriteLine("\n\n" + P1.toString() + "\n\n" + P2.toString());
+            if (PlayerNumber > 2) //Joueur 3 si il y en a un
+            {
+                Console.WriteLine("\n\n" + P3.toString());
+                if (PlayerNumber > 3) //Joueur 4 si il y en a un
+                {
+                    Console.WriteLine("\n\n" + P4.toString());
+                }
+            }
+
+            //Affiche le nom et le score du joueur qui a gagné la partie
+            int meilleurscore = 0;
+            for(int i = 0; i < PlayerNumber; i++)
+            {
+                if (P[meilleurscore].Score < P[i].Score) meilleurscore = i;
+            }
+            Console.WriteLine("Le joeur " + P[meilleurscore].Nom + "a gagné la partie avec un score de " + P[meilleurscore].Score + "points");
         }
     }
 }
