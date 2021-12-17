@@ -186,7 +186,6 @@ namespace Projet_Scrabble
                         goto DEBUTDETOUR;
                     }
 
-
                     //On place le mot dans le plateau et on s'occupe du score
                     for (int i = 0; i < answer.Length; i++)
                     {

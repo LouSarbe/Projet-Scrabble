@@ -124,13 +124,10 @@ namespace Projet_Scrabble
             bool stop = false;
             for(int i = 0; i < jetons.Count; i++)
             {
-                while (!stop)
+                if (jetons[i].Char == jeton && !stop)
                 {
-                    if (jetons[i].Char == jeton)
-                    {
-                        jetons.RemoveAt(i);
-                        stop = true;
-                    }
+                    jetons.RemoveAt(i);
+                    stop = true;
                 }
             }
         }
