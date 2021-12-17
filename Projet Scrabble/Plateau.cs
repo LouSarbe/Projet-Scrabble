@@ -34,6 +34,8 @@ namespace Projet_Scrabble
             for(int i =0; i < 15; i++)
             {
                 for (int j = 0; j < 15; j++) plateau[i, j] = '_';
+
+                //Configuration des cases spéciales
                 plateau[0, 0] = '4';
                 plateau[0, 7] = '4';
                 plateau[0, 14] = '4';
@@ -116,7 +118,7 @@ namespace Projet_Scrabble
             {
                 for (int j = 0; j < plateau.GetLength(1); j++)
                 {
-                    if (plateau[i, j] == '1' || plateau[i, j] == '2' || plateau[i, j] == '3' || plateau[i, j] == '4') ret += "_ ";
+                    if (plateau[i, j] == '1' || plateau[i, j] == '2' || plateau[i, j] == '3' || plateau[i, j] == '4') ret += "_ "; //Les 1, 2, 3 et 4 sont des cases 
                     else ret += plateau[i, j] + " ";
                 }
                 ret += "\n";
@@ -139,11 +141,11 @@ namespace Projet_Scrabble
                 {
                     for(int i = 0; i < mot.Length; i++) //Vérification que les cases sont vides, ou que les croisements ont les mêmes lettres
                     {
-                        if (plateau[ligne, colonne - i] != mot[i] && plateau[ligne, colonne - i] != '_')
+                        if (plateau[ligne, colonne - i] != mot[i] && plateau[ligne, colonne - i] != '_' && plateau[ligne, colonne - i] != '1' && plateau[ligne, colonne - i] != '2' && plateau[ligne, colonne - i] != '3' && plateau[ligne, colonne - i] != '4')
                         {
                             ret = false;
                         }
-                        else //Tout est bon, on maintenant regarder les jetons utilisés et les cases spéciales (mot double, lettre triple, ...)
+                        else //Tout est bon, on maintenant regarder les jetons utilisés
                         {
                             if (plateau[ligne, colonne - i] != mot[i]) jetons.Add(mot[i]);
                         }
@@ -163,11 +165,11 @@ namespace Projet_Scrabble
                 {
                     for (int i = 0; i < mot.Length; i++)//Vérification que les cases sont vides, ou que les croisements ont les mêmes lettres
                     {
-                        if (plateau[ligne, colonne + i] != mot[i] && plateau[ligne, colonne  + i] != '_')
+                        if (plateau[ligne, colonne + i] != mot[i] && plateau[ligne, colonne  + i] != '_' && plateau[ligne, colonne - i] != '1' && plateau[ligne, colonne - i] != '2' && plateau[ligne, colonne - i] != '3' && plateau[ligne, colonne - i] != '4')
                         {
                             ret = false;
                         }
-                        else //Tout est bon, on maintenant regarder les jetons utilisés et les cases spéciales (mot double, lettre triple, ...)
+                        else //Tout est bon, on maintenant regarder les jetons utilisés
                         {
                             if (plateau[ligne, colonne + i] != mot[i]) jetons.Add(mot[i]);
                         }
@@ -187,12 +189,12 @@ namespace Projet_Scrabble
             {
                     for (int i = 0; i < mot.Length; i++)//Vérification que les cases sont vides, ou que les croisements ont les mêmes lettres
                     {
-                        if (plateau[ligne - i, colonne] != mot[i] && plateau[ligne - i, colonne] != '_')
+                        if (plateau[ligne - i, colonne] != mot[i] && plateau[ligne - i, colonne] != '_' && plateau[ligne, colonne - i] != '1' && plateau[ligne, colonne - i] != '2' && plateau[ligne, colonne - i] != '3' && plateau[ligne, colonne - i] != '4')
                         {
                             Console.WriteLine("Erreur, il n'est pas possible de placer ce mot ici.");
                             ret = false;
                         }
-                        else //Tout est bon, on maintenant regarder les jetons utilisés et les cases spéciales (mot double, lettre triple, ...)
+                        else //Tout est bon, on maintenant regarder les jetons utilisés
                         {
                             if (plateau[ligne - i, colonne] != mot[i]) jetons.Add(mot[i]);
                         }
@@ -212,11 +214,11 @@ namespace Projet_Scrabble
                 {
                     for (int i = 0; i < mot.Length; i++)//Vérification que les cases sont vides, ou que les croisements ont les mêmes lettres
                     {
-                        if (plateau[ligne + i, colonne] != mot[i] && plateau[ligne + i, colonne] != '_')
+                        if (plateau[ligne + i, colonne] != mot[i] && plateau[ligne + i, colonne] != '_' && plateau[ligne, colonne - i] != '1' && plateau[ligne, colonne - i] != '2' && plateau[ligne, colonne - i] != '3' && plateau[ligne, colonne - i] != '4')
             {
                             ret = false;
                         }
-                        else //Tout est bon, on maintenant regarder les jetons utilisés et les cases spéciales (mot double, lettre triple, ...)
+                        else //Tout est bon, on maintenant regarder les jetons utilisés
                         {
                             if (plateau[ligne + i, colonne] != mot[i]) jetons.Add(mot[i]);
                         }
