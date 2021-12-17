@@ -128,7 +128,7 @@ namespace Projet_Scrabble
                         Console.WriteLine("Si vous voulez passer votre tour, appuyez sur espace. Sinon appuyez sur n'importe quelle touche");
                         cki = Console.ReadKey();
                         if (cki.Key == ConsoleKey.Spacebar) goto PasserLeTour; //Si le joueur appuie sur espace, il passe le tour sans poser de mot
-                        Console.WriteLine("Quel mot voulez vous placer ?");
+                        Console.WriteLine("\n\nQuel mot voulez vous placer ?");
                         answer = Convert.ToString(Console.ReadLine()).ToUpper(); //Enregistre la réponse de l'utilisateur, en lettres majuscules
                         if (!mondico.RechercheMot(answer)) Console.WriteLine("Le mot " + answer + " n'appartient pas au dictionnaire");
                     } while (!mondico.RechercheMot(answer));
